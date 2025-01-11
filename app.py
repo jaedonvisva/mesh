@@ -1,6 +1,6 @@
 import cohere
 
-co = cohere.Client('9RyvbfpV1LmYZwj5iMCgdVYpCvzoq0hfFpMajjPE')
+co = cohere.Client('')
 
 people_db = [
 {
