@@ -14,6 +14,8 @@ def extract_from_pdf(file):
         text += page.extract_text()
     return text
 
+
+
 def extract_cohere(file):
     prompt = f"""
     Extract the following details from the resume and format the output as a JSON object with the specified keys:

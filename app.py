@@ -1,6 +1,7 @@
 import cohere
+import os
 
-co = cohere.Client('')
+co = cohere.Client(os.getenv('COHERE_API_KEY'))
 
 people_db = [
 {
@@ -83,18 +84,12 @@ def get_llm_response(query: str) -> str:
     prompt = f"""
 Based on the following database of people, answer this question by listing each relevant person with a color-coded ranking:
 - Green = perfect match (the prompt keywords exist in the person's tags, skills, or background)
-- Yellow = partial match (some relevant experience)
+- Yellow = partial match (some relevant experience, ie. a similar type of database (if you use SQL, you might also know mongodb since they are both databases))
 - Red = no match at all (keywords do not appear)
 
-Use the format:
-1. Alice Chen - Green
-2. Bob Smith - Yellow
-3. and so on... 
-...
+For everyone, provide them a rank based on the colour scale provided above, and assure that each person only gets assigned one colour.
 
-Rank everyone in the database from green to red. 
-
-Explain why you selected what you did.
+Output as a json format with the keys being the colours, and the value being the name of the person.
 
 Prompt: "{query}"
 
@@ -106,8 +101,8 @@ Response:
         response = co.generate(
             prompt=prompt,
             model='command',
-            max_tokens=300,
-            temperature=0.7,
+            max_tokens=500,
+            temperature=0.3,
             stop_sequences=[],
             return_likelihoods='NONE'
         )
