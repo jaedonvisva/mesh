@@ -1,6 +1,8 @@
-import cohere
 import os
+from dotenv import load_dotenv
+import cohere
 
+load_dotenv()
 co = cohere.Client(os.getenv('COHERE_API_KEY'))
 
 people_db = [
@@ -82,15 +84,15 @@ def get_llm_response(query: str) -> str:
     context = format_database_context()
 
     prompt = f"""
-Based on the following database of people, answer this question by listing each relevant person with a color-coded ranking:
-- Green = perfect match (the prompt keywords exist in the person's tags, skills, or background)
-- Yellow = partial match (some relevant experience, ie. a similar type of database (if you use SQL, you might also know mongodb since they are both databases))
-- Red = no match at all (keywords do not appear)
+You are a smart assistant tasked with ranking people from a database based on how well their skills, background, and tags match the user's query. Follow these steps:
 
-For everyone, provide them a rank based on the colour scale provided above, and assure that each person only gets assigned one colour.
+1. Compare the keywords from the query with the "skills," "background," and "tags" fields of each person. 
+2. Assign a ranking based on relevance:
+   - **Green**: Perfect match. The query keywords exist explicitly in their "skills," "background," or "tags."
+   - **Yellow**: Partial match. They have related experience or skills that could reasonably apply to the query.
+   - **Red**: No match. There is no connection to the query in their "skills," "background," or "tags."
 
-Output as a json format with the keys being the colours, and the value being the name of the person.
-
+Output the response as a JSON object with the colours as the keys, and a list of the people's names only as the values
 Prompt: "{query}"
 
 {context}
@@ -111,25 +113,5 @@ Response:
         return f"Error generating response: {str(e)}"
 
 
-def main():
-    print("Mesh!")
-    print("Enter 'quit' to exit\n")
-
-    while True:
-        query = input("\nEnter your prompt: ").strip()
-
-        if query.lower() == 'quit':
-            print("Goodbye!")
-            break
-
-        if not query:
-            print("Please enter a valid query")
-            continue
-
-        print("\nGenerating response...")
-        response = get_llm_response(query)
-        print(f"\n{response}")
 
 
-if __name__ == "__main__":
-    main()

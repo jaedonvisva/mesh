@@ -3,3 +3,5 @@ pymongo
 PyPDF2
 os
 dotenv
+flask
+flask-cors 
