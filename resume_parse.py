@@ -14,7 +14,7 @@ def extract_from_pdf(file):
         text += page.extract_text()
     return text
 
-def extract_cohere(text, model):
+def extract_cohere(file):
     prompt = f"""
     Extract the following details from the resume and format the output as a JSON object with the specified keys:
     
@@ -26,7 +26,7 @@ def extract_cohere(text, model):
     6. "tags": A list of descriptive tags summarizing the resume content.
 
     Resume text:
-    {text}
+    {extract_from_pdf(file)}
 
     Format the output as JSON. For example:
     """
@@ -35,5 +35,5 @@ def extract_cohere(text, model):
     
     return response.generations[0].text.strip()
 
-resume_text = extract_from_pdf('/Users/jaedonvisva/MGTE/Resume/SWE-Data.pdf')
-print(extract_cohere(resume_text, model))
+if __name__ == "__main__":
+    pass
