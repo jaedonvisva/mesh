@@ -1,2 +1,3 @@
 cohere
+pymongo
 PyPDF2
