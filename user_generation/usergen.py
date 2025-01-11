@@ -1,5 +1,8 @@
 from pymongo import MongoClient
-client = MongoClient("mongodb+srv://Jaazib:Jt2006@mesh.ttoh4.mongodb.net/?retryWrites=true&w=majority&appName=Mesh")
+from dotenv import load_dotenv
+import os
+load_dotenv()
+client = MongoClient(os.getenv("MONGO_URI"))
 db = client["Users"]
 collection = db["Users"]
 
@@ -16,3 +19,5 @@ class User:
 
 
 
+user = User("John Does", 25, ["Python", "JavaScript"], 3, ["Reading", "Traveling"])
+user.save()

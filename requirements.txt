@@ -1,3 +1,5 @@
 cohere
 pymongo
 PyPDF2
+os
+dotenv
