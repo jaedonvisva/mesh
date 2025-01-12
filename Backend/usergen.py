@@ -10,7 +10,7 @@ db = client["Users"]
 collection = db["Users"]
 
 class User:
-    def __init__(self, name, age=None, skills=None, experience=None, interests=None, background=None, tags=None):
+    def __init__(self, name, age=None, skills=None, experience=None, interests=None, background=None, tags=None, accepted_connections=None):
         self.name = name
         self.age = age
         self.skills = skills
@@ -18,6 +18,7 @@ class User:
         self.interests = interests
         self.background = background
         self.tags = tags
+        self.accepted_connections = accepted_connections or []
 
     def save(self):
         collection.insert_one(self.__dict__)
