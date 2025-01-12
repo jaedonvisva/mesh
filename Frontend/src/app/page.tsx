@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { useAuth0 } from '@auth0/auth0-react';
 
 interface Dot {
   id: number;
@@ -34,7 +33,6 @@ const BackgroundDot = ({ x, y, size, color }: Dot) => (
 
 export default function App() {
   const [dots, setDots] = useState<Dot[]>([]);
-  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
   const router = useRouter();
 
   useEffect(() => {
@@ -50,24 +48,7 @@ export default function App() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#222831]">
-      {/* Top Right Login/Logout Button */}
-      <div className="absolute top-4 right-4">
-        {!isAuthenticated ? (
-          <button
-            onClick={() => loginWithRedirect()}
-            className="bg-white text-[#2a333f] px-6 py-2 rounded-full text-sm font-semibold hover:bg-orange-500 hover:text-white transition duration-300 shadow-lg hover:shadow-xl"
-          >
-            Sign In / Sign Up
-          </button>
-        ) : (
-          <button
-            onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
-            className="bg-red-600 text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition duration-300 shadow-lg hover:shadow-xl"
-          >
-            Log Out
-          </button>
-        )}
-      </div>
+      
 
       {/* Hero Text Section */}
       <div className="container mx-auto px-4 z-10">
@@ -89,17 +70,7 @@ export default function App() {
           Connect Better. Connect More<br />Network Boosted.
         </motion.h1>
 
-        {/* Personalized Greeting */}
-        {isAuthenticated && user?.given_name && (
-          <motion.h2
-            className="text-4xl font-bold text-center text-green-400 mt-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            Hello, {user.given_name}!
-          </motion.h2>
-        )}
+        
 
         {/* Button Section */}
         <motion.div
