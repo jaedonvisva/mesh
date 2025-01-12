@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from usergen import User
-from prompt import get_llm_response
+from prompt import process_candidates
 from resume_parse import parse_resume
+
 import json
 
 app = Flask(__name__)
@@ -50,7 +51,7 @@ def regestration():
 @app.route("/prompt", methods=["POST"])
 def prompt():
     data = request.json
-    prompt = get_llm_response(data.get("prompt"))
+    prompt = process_candidates(data.get("prompt"))
     return prompt
 
 

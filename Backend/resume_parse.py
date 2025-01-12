@@ -1,6 +1,5 @@
 import json
 from PyPDF2 import PdfReader
-from prompt import get_llm_response
 import cohere
 import os
 from dotenv import load_dotenv
