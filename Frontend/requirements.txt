@@ -1,0 +1,6 @@
+
+next
+motion
+lucide-motion
+next/font
+--save @fortawesome/fontawesome-free

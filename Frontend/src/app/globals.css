@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #303d4e;
+  --foreground: #303d4e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #303d4e;
+    --foreground: #303d4e;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+  --gradient-start: #dc4174;
+  --gradient-middle: #e88c51;
+  --gradient-end: #f4c84c;
+}
+
+.animated-gradient-text {
+  background-image: linear-gradient(45deg, #dc4174, #e88c51, #f4c84c);
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: gradient-shift 6s infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.pulse-glow {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px #e88c51, 0 0 40px #e27836;
+  }
+  50% {
+    box-shadow: 0 0 20px #dc4174, 0 0 80px #fc3678;
+  }
+}
+
+#hero-section.fade-out {
+  animation: fadeOut 0.8s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.glowing-text {
+  color: white;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px rgba(255, 255, 255, 0.6);
+  animation: subtle-glow 2s infinite alternate;
+}
+
+.white-text {
+  color:rgba(255, 255, 255, 0.6);;
+}
+
+@keyframes subtle-glow {
+  from {
+    text-shadow: 0 0 2px #ffffff, 0 0 2px #ffffff, 0 0 5px rgba(255, 255, 255, 0.6);
+  }
+  to {
+    text-shadow: 0 0 2px #ffffff, 0 0 2px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.4);
+  }
+}
+@layer components {
+  .sidebar {
+    @apply relative flex items-center justify-center 
+      h-14 w-14 mt-2 mb-3 mx-auto shadow-lg
+      bg-gray-800 text-orange-300
+      hover:bg-yellow-600 hover:text-white
+      rounded-3xl hover:rounded-xl
+      transition-all duration-300 ease-linear
+      cursor-pointer;
+  }
+}
+
+input[type="file"]:hover {
+  background-color: #3e4a5c;
+  color: #fff;
+  cursor: pointer;
+}
+
