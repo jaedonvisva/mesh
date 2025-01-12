@@ -28,12 +28,13 @@ except Exception as e:
 def get_all_people() -> List[Dict]:
     """Return all users from MongoDB."""
     try:
+        print("1")
         users_cursor = users_collection.find()
+        print("2")
         users = []
         for user in users_cursor:
             user['_id'] = str(user['_id'])  # Convert ObjectId to string
             users.append(user)
-        print(users)
         return users
     except Exception as e:
         raise Exception(f"Error fetching users: {e}")
@@ -63,53 +64,6 @@ Tags: {', '.join(person.get('tags', []))}
 """
     return context
 
-
-def search_people(query: str) -> Dict:
-    """Search users using Cohere."""
-    try:
-        people = get_all_people()
-        if not people:
-            return {"error": "No users found in the database."}
-
-        context = format_database_context()
-        prompt = f"""
-Based on the following database of people, find matches for this search query: "{query}"
-
-Rate each person as:
-- Perfect match (GREEN): Keywords appear in their tags, skills, or background
-- Partial match (YELLOW): Has related/transferable skills
-- No match (RED): No relevant skills or experience
-
-Return response as valid JSON with this format, only return the object do not include any other boilerplate text, Strictly follow the format otherwise I will be mad:
-{{
-    "green": ["name1", "name2"],
-    "yellow": ["name3", "name4"], 
-    "red": ["name5", "name6"]
-}}
-
-Database entries:
-{context}
-"""
-        response = co.generate(
-            model='command',
-            prompt=prompt,
-            max_tokens=500,
-            temperature=0.3,
-            stop_sequences=['}'],
-            return_likelihoods='NONE'
-        )
-        result = response.generations[0].text.strip()
-        result = result.replace("```json", "").replace("```", "").strip()
-        print(result)
-        # Ensure the JSON is properly parsed
-        parsed_result = json.loads(result)
-        return parsed_result
-    except json.JSONDecodeError as jde:
-        return {"error": f"Invalid JSON response from Cohere: {str(jde)}"}
-    except Exception as e:
-        return {"errors": str(e)}
-
-
 # Format candidates for embedding
 def extract_cohere(query):
     prompt = f"""
@@ -126,6 +80,7 @@ def extract_cohere(query):
     Now, analyze this query: "{query}", generating only the JSON object. dont tell me the rational.
     """
     response = co.generate(model=model, prompt=prompt, max_tokens=2000, temperature=0.3)
+    print(response.generations[0].text.strip())
     return response.generations[0].text.strip()
 
 
@@ -172,6 +127,69 @@ def categorize_and_return_results(results, documents, good_threshold, okay_thres
 def process_candidates(query):
     # Format candidates for embedding
     people_db = get_all_people()
+    return people_db
+#     people_db = [
+#     {
+#         "name": "Alice Chen",
+#         "skills": ["MongoDB", "Node.js", "Express", "Database Architecture"],
+#         "background": "Senior Database Engineer with 8 years of experience in NoSQL databases",
+#         "tags": ["backend", "database", "nosql", "mongodb"]
+#     },
+#     {
+#         "name": "Bob Smith",
+#         "skills": ["Python", "Data Analysis", "Machine Learning"],
+#         "background": "Data Scientist specializing in aggregation pipelines",
+#         "tags": ["data science", "machine learning"]
+#     },
+#     {
+#         "name": "Charlie Johnson",
+#         "skills": ["React", "JavaScript", "HTML", "CSS"],
+#         "background": "Frontend Developer with 5 years of experience building single-page applications",
+#         "tags": ["frontend", "javascript", "react"]
+#     },
+#     {
+#         "name": "Diana Robinson",
+#         "skills": ["AWS", "DevOps", "Docker", "Kubernetes"],
+#         "background": "DevOps Engineer with 7 years of experience automating CI/CD pipelines",
+#         "tags": ["devops", "cloud", "aws", "docker"]
+#     },
+#     {
+#         "name": "Ethan Brown",
+#         "skills": ["C++", "Embedded Systems", "Real-Time OS"],
+#         "background": "Firmware Engineer with 4 years of experience in IoT product development",
+#         "tags": ["firmware", "iot", "embedded"]
+#     },
+#     {
+#         "name": "Fiona Anderson",
+#         "skills": ["UI/UX Design", "Figma", "Sketch", "Prototyping"],
+#         "background": "UI/UX Designer with 5 years of experience leading design teams in startups",
+#         "tags": ["design", "ui/ux", "visual"]
+#     },
+#     {
+#         "name": "George Wilson",
+#         "skills": ["Angular", "TypeScript", "RxJS", "NgRx"],
+#         "background": "Senior Frontend Engineer with extensive experience in enterprise Angular apps",
+#         "tags": ["frontend", "angular", "typescript"]
+#     },
+#     {
+#         "name": "Hannah Lee",
+#         "skills": ["Project Management", "Scrum", "Agile"],
+#         "background": "Agile Project Manager with 6 years of experience in software development cycle planning",
+#         "tags": ["project management", "scrum", "agile"]
+#     },
+#     {
+#         "name": "Ian Davis",
+#         "skills": ["iOS Development", "Swift", "Objective-C"],
+#         "background": "Mobile Developer with 5 years of experience in building native iOS applications",
+#         "tags": ["mobile", "ios", "swift"]
+#     },
+#     {
+#         "name": "Jasmine Patel",
+#         "skills": ["Java", "Spring Boot", "Microservices", "SQL"],
+#         "background": "Backend Developer specializing in microservice architecture for financial applications",
+#         "tags": ["backend", "java", "microservices", "sql"]
+#     }
+# ]
     candidates = [
         f"Skills: {', '.join(person['skills'])}. Tags: {', '.join(person['tags'])}. Background: {person['background']}."
         for person in people_db
