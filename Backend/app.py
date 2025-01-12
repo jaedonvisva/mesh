@@ -39,6 +39,21 @@ def prompt():
     data = request.json
     prompt = process_candidates(data.get("prompt"))
     return prompt
+@app.route("/update-connections", methods=["POST"])
+def update_connections():
+    data = request.json
+    user_id = data.get('userId')
+    accepted_id = data.get('acceptedId')
+    
+    try:
+        # Update the user's accepted connections
+        collection.update_one(
+            {"_id": user_id},
+            {"$addToSet": {"accepted_connections": accepted_id}}
+        )
+        return jsonify({"message": "Connection updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 
