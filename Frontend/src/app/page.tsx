@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useAuth0 } from '@auth0/auth0-react';
 
+
 interface Dot {
   id: number;
   x: number;

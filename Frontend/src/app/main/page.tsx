@@ -5,6 +5,7 @@ import MeshLogo from '@/components/MeshLogo';
 import { Searchbar } from '@/components/Searchbar';
 import TinderSwipe from '@/components/TinderSwipe';
 import UserCards from '@/components/TinderSwipe';
+import NewUserForm from '@/components/NewUserForm';
 
 export default function Main() {
   fetch('https://local_host/api/get-users', {
@@ -32,6 +33,9 @@ export default function Main() {
         <MeshLogo />
         <Searchbar />
       </div>
+      <div style={styles.formWrapper}>
+          <NewUserForm />
+        </div>
       <div style={styles.content}>
       <UserCards />
       </div>
@@ -43,12 +47,19 @@ const styles = {
   container: {
     minHeight: '100vh',
     backgroundColor: '#303d4e',
+    color: "white",
+    position: 'relative',
   },
   header: {
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '20px',
+  },
+  formWrapper: {
+    position: 'absolute',
+    top: '20px', // Adjust for desired padding from the top
+    right: '20px', // Adjust for desired padding from the right
   },
   content: {
     display: 'flex',

@@ -127,7 +127,7 @@ const UserMatchingCards = () => {
 
   if (!isStarted) {
     return (
-      <div className="flex justify-center items-center min-h-[80vh] bg-gray-900">
+      <div className="flex justify-center items-center min-h-[80vh] bg-#303d4e-900">
         <button
           onClick={handleStartMatching}
           className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors transform hover:scale-105 shadow-lg"
@@ -200,17 +200,6 @@ const UserMatchingCards = () => {
     <div className="flex flex-col items-center justify-center min-h-[80vh] p-4 bg-gray-900">
       <div className="w-full max-w-md">
         <div className="bg-transparent backdrop-filter backdrop-blur-lg bg-opacity-30 rounded-lg shadow-lg overflow-hidden transition-all duration-500">
-          {currentProfile.photo ? (
-            <img
-              src={currentProfile.photo}
-              alt={currentProfile.name}
-              className="w-full h-72 object-cover"
-            />
-          ) : (
-            <div className="w-full h-72 bg-gray-700 flex items-center justify-center">
-              <span className="text-gray-300">No Image Available</span>
-            </div>
-          )}
           <div className="p-6">
             <h3 className="text-2xl font-bold text-white">{currentProfile.name}</h3>
             {currentProfile.age && (

@@ -6,9 +6,9 @@ import { useTypewriter } from '@/components/hooks/useTypewriter'
 
 const examplePrompts = [
   "Who is able to work with React?",
-  "What are the best practices for responsive design?",
-  "How to optimize React performance?",
-  "Explain the concept of server-side rendering",
+  "I am building a full-stack project, who would be good for that?",
+  "Who has experience in SQL?",
+  "Who has the most frontend experience?",
 ]
 
 export function Searchbar() {
