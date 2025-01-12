@@ -14,13 +14,14 @@ def parse_resume(file) -> dict:
         pdf_text = extract_text_from_pdf(file)
         
         prompt = f"""
-Extract these details from the resume and return as JSON:
-1. name: Full name
-2. skills: List of technical skills
-3. experience: List of work history (company, role, dates)
-4. education: Academic background
-5. projects: Notable projects
-6. tags: Key areas of expertise
+Extract the following details from the resume and format the output as a JSON object with the specified keys:
+
+"name": The full name of the person.
+"skills": A list of technical skills (e.g., programming languages, frameworks, tools).
+"experience": A list of work experiences, each containing the company name, role, and duration.
+"background": A summary of the person's professional background.
+"interests": A list of personal interests or hobbies.
+"tags": A list of descriptive tags summarizing the resume content.
 
 Resume text:
 {pdf_text}
@@ -36,9 +37,9 @@ Return ONLY valid JSON like:
             "dates": "2020-2023"
         }}
     ],
-    "education": "BS Computer Science",
-    "projects": ["Built API", "Led team"],
-    "tags": ["backend", "python"]
+    "tags": ["backend", "python"],
+    "background": "Senior Software Engineer with 5 years of experience in web development",
+    "interests": ["Reading", "Traveling", "Gaming"]
 }}
 """
         response = co.generate(

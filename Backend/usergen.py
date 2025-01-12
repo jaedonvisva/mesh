@@ -22,4 +22,3 @@ class User:
     def save(self):
         collection.insert_one(self.__dict__)
 
-# Define user data

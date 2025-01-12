@@ -23,17 +23,7 @@ def regestration():
 
     if file.filename == '':
         return jsonify({"error": "No file selected"}), 400
-
-    # Handle the additional JSON data
-    user_data = request.form.get('user_data')
-
-    if not user_data:
-        return jsonify({"error": "No user data provided"}), 400
-
-    try:
-        user_data = json.loads(user_data)  # Parse the JSON data
-    except json.JSONDecodeError:
-        return jsonify({"error": "Invalid JSON in user_data"}), 400
+   
 
     # Process the file (parse_resume function processes the PDF file)
     try:
@@ -41,13 +31,9 @@ def regestration():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    # Combine the parsed resume data with user information
-    response_data = {
-        "user_info": user_data,
-        "resume_info": resume_data
-    }
-
-    return jsonify({"message": "Registration successful", "data": response_data})
+    user = User(**resume_data)
+    user.save()
+    return jsonify({"message": "Registration successful", "data": resume_data})
 @app.route("/prompt", methods=["POST"])
 def prompt():
     data = request.json
