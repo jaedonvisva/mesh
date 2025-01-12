@@ -1,53 +1,58 @@
 'use client';
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import MeshLogo from '@/components/MeshLogo';
 import { Searchbar } from '@/components/Searchbar';
+import TinderSwipe from '@/components/TinderSwipe';
+import UserCards from '@/components/TinderSwipe';
 
-function App() {
+export default function Main() {
+  fetch('https://local_host/api/get-users', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.users) {
+        console.log('All users fetched successfully:', data.users);
+      } else {
+        console.error('Error fetching users:', data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Network error:', error);
+    });
+
   return (
-    <Router>
-      <div style={styles.container}>
-        <Navbar />
-        <div style={styles.header}>
-          <MeshLogo />
-          <Searchbar />
-        </div>
+    <div style={styles.container}>
+      <Navbar />
+      <div style={styles.header}>
+        <MeshLogo />
+        <Searchbar />
       </div>
-
-      {/* Routes */}
-      <Routes>
-        <Route path="/" element={<h1 style={styles.pageText}>Home</h1>} />
-        <Route path="/search" element={<h1 style={styles.pageText}>Search</h1>} />
-        <Route path="/profile" element={<h1 style={styles.pageText}>Profile</h1>} />
-      </Routes>
-    </Router>
+      <div style={styles.content}>
+      <UserCards />
+      </div>
+    </div>
   );
 }
 
-export default App;
-
 const styles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
     minHeight: '100vh',
-    backgroundColor: '#303d4e', // ✅ Exact color match
-    color: 'white',
+    backgroundColor: '#303d4e',
   },
   header: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as const,
     alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
     padding: '20px',
-    backgroundColor: '#303d4e',
-    gap: '20px',
   },
-  pageText: {
-    color: 'white',
-  },
+  content: {
+    display: 'flex',
+    justifyContent: 'center',
+    padding: '20px',
+  }
 };
