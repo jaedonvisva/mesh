@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
-from graph import generate_network_graph  # Import the function
 import re
 
 app = Flask(__name__)
@@ -10,7 +9,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Folder to store uploaded resumes
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure the uploads folder exists
@@ -20,14 +19,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 def sanitize_filename(filename):
     return re.sub(r'[\\\\/:*?"<>|]', '_', filename)
 
-@app.route('/api/network-graph', methods=['GET'])
-def get_network_graph():
-    try:
-        graph_data = generate_network_graph()
-        return jsonify(graph_data)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-    
+
 # Route to handle resume uploads
 @app.route('/upload-resume', methods=['POST'])
 def upload_resume():

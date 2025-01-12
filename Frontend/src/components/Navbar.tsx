@@ -38,12 +38,12 @@ function Navbar() {
 
       // Include the Auth0 user ID in the request
       if (user && isAuthenticated) {
-        formData.append('auth0_id', user.sub);
+        formData.append('auth0_id', user.sub || '');
       }
 
       try {
         // Send the file to the Flask backend
-        const response = await fetch('http://localhost:5000/upload-resume', {
+        const response = await fetch('http://127.0.0.1:5000/upload-resume', {
           method: 'POST',
           body: formData,
         });
