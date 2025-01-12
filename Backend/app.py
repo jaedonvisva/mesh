@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from usergen import User
+from usergen import User, collection
 from prompt import process_candidates
 from resume_parse import parse_resume
-
+from new_user_cohere import generate_user_data
 import json
 
 app = Flask(__name__)
@@ -39,6 +39,7 @@ def prompt():
     data = request.json
     prompt = process_candidates(data.get("prompt"))
     return prompt
+
 @app.route("/update-connections", methods=["POST"])
 def update_connections():
     data = request.json
@@ -55,7 +56,20 @@ def update_connections():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/manual_add", methods=["POST"])
+def manual_add():
+    data = request.json
+    name = data.get('name')
+    bio = data.get('bio')
 
+    input = str(name) + ": " + str(bio)
+
+    user_data = generate_user_data(input)
+
+    user = User(**user_data)
+
+    # change to user.save() when finalized
+    return user.__dict__
 
 
 if __name__ == "__main__":

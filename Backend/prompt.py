@@ -55,7 +55,6 @@ def extract_cohere(query):
     Now, analyze this query: "{query}", generating only the JSON object. dont tell me the rational.
     """
     response = co.generate(model=model, prompt=prompt, max_tokens=2000, temperature=0.3)
-    print(response.generations[0].text.strip())
     return response.generations[0].text.strip()
 
 
