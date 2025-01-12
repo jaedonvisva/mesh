@@ -138,6 +138,7 @@ const styles = {
     minHeight: '100px',
     resize: 'none',
     transition: 'border-color 0.3s ease',
+    color: '#000',
   },
   submitButton: {
     padding: '10px 20px',
