@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import MeshLogo from '@/components/MeshLogo';
 import { Searchbar } from '@/components/Searchbar';
+import NewUserForm from '@/components/NewUserForm';
 
 function App() {
   return (
@@ -13,6 +14,9 @@ function App() {
         <div style={styles.header}>
           <MeshLogo />
           <Searchbar />
+        </div>
+        <div style={styles.formWrapper}>
+          <NewUserForm />
         </div>
       </div>
 
@@ -36,6 +40,7 @@ const styles = {
     minHeight: '100vh',
     backgroundColor: '#303d4e', // ✅ Exact color match
     color: 'white',
+    position: 'relative', // Needed for positioning child elements absolutely
   },
   header: {
     display: 'flex',
@@ -46,6 +51,11 @@ const styles = {
     padding: '20px',
     backgroundColor: '#303d4e',
     gap: '20px',
+  },
+  formWrapper: {
+    position: 'absolute',
+    top: '20px', // Adjust for desired padding from the top
+    right: '20px', // Adjust for desired padding from the right
   },
   pageText: {
     color: 'white',

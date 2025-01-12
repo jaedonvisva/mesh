@@ -68,8 +68,8 @@ def manual_add():
 
     user = User(**user_data)
 
-    # change to user.save() when finalized
-    return user.__dict__
+    user.save()
+    return jsonify({"message": "User added successfully", "data": user_data})
 
 
 if __name__ == "__main__":

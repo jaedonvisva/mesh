@@ -107,6 +107,8 @@ function Navbar() {
             onChange={handleResumeUpload}
           />
 
+          
+
           {resume && (
             <div className="mt-4">
               <p className="font-bold text-green-500">File Uploaded: {resume.name}</p>
