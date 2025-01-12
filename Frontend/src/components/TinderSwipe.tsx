@@ -1,6 +1,7 @@
 // components/UserMatchingCards.tsx
 
 import React, { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { Check, X } from 'lucide-react';
 
 interface User {
@@ -16,7 +17,188 @@ interface User {
   bio?: string;   // Added for user biography
 }
 
-const UserMatchingCards = () => {
+/* Styled Components */
+
+/* Container for different states */
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background-color: #303d4e;
+  padding: 20px;
+`;
+
+/* Button Styles */
+const Button = styled.button<{ variant?: string }>`
+  background-color: ${({ variant }) => {
+    switch (variant) {
+      case 'orange':
+        return '#f97316'; // Orange-500
+      case 'red':
+        return '#dc2626'; // Red-600
+      case 'green':
+        return '#16a34a'; // Green-600
+      case 'gray':
+        return '#6b7280'; // Gray-500
+      case 'blue':
+        return '#3b82f6'; // Blue-500
+      default:
+        return '#f97316'; // Default to Orange-500
+    }
+  }};
+  color: #ffffff;
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: ${({ variant }) => {
+      switch (variant) {
+        case 'orange':
+          return '#ea580c'; // Orange-600
+        case 'red':
+          return '#b91c1c'; // Red-700
+        case 'green':
+          return '#15803d'; // Green-700
+        case 'gray':
+          return '#4b5563'; // Gray-600
+        case 'blue':
+          return '#2563eb'; // Blue-600
+        default:
+          return '#ea580c'; // Default to Orange-600
+      }
+    }};
+    transform: scale(1.05);
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+/* Spinner Animation */
+const spin = keyframes`
+  to { transform: rotate(360deg); }
+`;
+
+/* Spinner Styles */
+const Spinner = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #f97316; /* Orange-500 */
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: ${spin} 1s linear infinite;
+`;
+
+/* Error Message Styles */
+const ErrorMessage = styled.div`
+  max-width: 400px;
+  padding: 20px;
+  background-color: #b91c1c; /* Red-700 */
+  color: #ffffff;
+  border: 2px solid #991b1b; /* Red-900 */
+  border-radius: 8px;
+  text-align: center;
+`;
+
+/* Message Styles */
+const Message = styled.p`
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
+/* Profile Card Styles */
+const ProfileCard = styled.div`
+  background: rgba(18, 18, 18, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.5s ease;
+  width: 100%;
+  max-width: 400px;
+  color: #ffffff;
+`;
+
+/* Profile Name */
+const ProfileName = styled.h3`
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+/* Profile Details */
+const ProfileDetail = styled.p`
+  color: #d1d5db; /* Gray-300 */
+  margin-bottom: 10px;
+`;
+
+/* Section Title */
+const SectionTitle = styled.p`
+  font-weight: 600;
+  margin-bottom: 5px;
+`;
+
+/* Tags Container */
+const Tags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+`;
+
+/* Individual Tag */
+const Tag = styled.span<{ color: string }>`
+  background-color: ${({ color }) => color};
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+`;
+
+/* Action Buttons Container */
+const ActionButtons = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+`;
+
+/* Individual Action Button */
+const ActionButton = styled.button<{ color: string }>`
+  background-color: ${({ color }) => color};
+  color: #ffffff;
+  padding: 16px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+/* Reset Connections Button Container */
+const ResetContainer = styled.div`
+  text-align: center;
+  margin-top: 30px;
+`;
+
+/* Main Component */
+const UserMatchingCards: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -91,6 +273,7 @@ const UserMatchingCards = () => {
       }
 
       setUsers(usersData.users || []);
+      setCurrentIndex(0);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error starting matching');
       setIsStarted(false);
@@ -125,153 +308,132 @@ const UserMatchingCards = () => {
     }
   };
 
+  /* Render Different States */
+
   if (!isStarted) {
     return (
-      <div className="flex justify-center items-center min-h-[80vh] bg-#303d4e-900">
-        <button
-          onClick={handleStartMatching}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors transform hover:scale-105 shadow-lg"
-        >
+      <Container style={{ backgroundColor: '#303d4e' }}>
+        <Button variant="orange" onClick={handleStartMatching}>
           Start Matching
-        </button>
-      </div>
+        </Button>
+      </Container>
     );
   }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[80vh] bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500"></div>
-      </div>
+      <Container style={{ backgroundColor: '#1f2937' }}>
+        <Spinner />
+      </Container>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-lg mx-auto p-6 bg-red-700 text-white border border-red-900 rounded-lg">
-        <p className="mb-4">Error: {error}</p>
-        <button
-          onClick={() => {
-            setError(null);
-            setIsStarted(false);
-          }}
-          className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition-colors transform hover:scale-105 shadow"
-        >
-          Try Again
-        </button>
-      </div>
+      <Container>
+        <ErrorMessage>
+          <p>Error: {error}</p>
+          <Button variant="red" onClick={() => { setError(null); setIsStarted(false); }}>
+            Try Again
+          </Button>
+        </ErrorMessage>
+      </Container>
     );
   }
 
   if (users.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] gap-4 bg-gray-900 text-white">
-        <p className="text-xl font-semibold">No profiles available!</p>
-        <button
-          onClick={handleStartMatching}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors transform hover:scale-105 shadow"
-        >
-          Refresh
-        </button>
-      </div>
+      <Container style={{ backgroundColor: '#303d4e' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+          <Message>No profiles available!</Message>
+          <Button variant="orange" onClick={handleStartMatching}>
+            Refresh
+          </Button>
+        </div>
+      </Container>
     );
   }
 
   if (currentIndex >= users.length) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] gap-4 bg-gray-900 text-white">
-        <p className="text-xl font-semibold">No more profiles to show!</p>
-        <button
-          onClick={() => {
-            setCurrentIndex(0);
-            handleStartMatching();
-          }}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors transform hover:scale-105 shadow"
-        >
-          Start Over
-        </button>
-      </div>
+      <Container style={{ backgroundColor: '#e88c51' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+          <Message>No more profiles to show!</Message>
+          <Button variant="orange" onClick={() => { setCurrentIndex(0); handleStartMatching(); }}>
+            Start Over
+          </Button>
+        </div>
+      </Container>
     );
   }
 
   const currentProfile = users[currentIndex];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] p-4 bg-gray-900">
-      <div className="w-full max-w-md">
-        <div className="bg-transparent backdrop-filter backdrop-blur-lg bg-opacity-30 rounded-lg shadow-lg overflow-hidden transition-all duration-500">
-          <div className="p-6">
-            <h3 className="text-2xl font-bold text-white">{currentProfile.name}</h3>
-            {currentProfile.age && (
-              <p className="text-gray-300 mt-2">Age: {currentProfile.age}</p>
-            )}
-            {currentProfile.bio && (
-              <p className="text-gray-300 mt-4">{currentProfile.bio}</p>
-            )}
-            {currentProfile.skills && currentProfile.skills.length > 0 && (
-              <div className="mt-4">
-                <p className="font-semibold text-white">Skills:</p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {currentProfile.skills.map((skill, index) => (
-                    <span
-                      key={index}
-                      className="bg-blue-600 text-white text-sm px-3 py-1 rounded-full"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            {currentProfile.interests && currentProfile.interests.length > 0 && (
-              <div className="mt-4">
-                <p className="font-semibold text-white">Interests:</p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {currentProfile.interests.map((interest, index) => (
-                    <span
-                      key={index}
-                      className="bg-green-600 text-white text-sm px-3 py-1 rounded-full"
-                    >
-                      {interest}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            {currentProfile.background && (
-              <div className="mt-4">
-                <p className="font-semibold text-white">Background:</p>
-                <p className="text-gray-300 mt-2">{currentProfile.background}</p>
-              </div>
-            )}
+    <Container style={{ backgroundColor: '#1f2937', flexDirection: 'column' }}>
+      <ProfileCard>
+        <ProfileName>{currentProfile.name}</ProfileName>
+        {currentProfile.age && (
+          <ProfileDetail>Age: {currentProfile.age}</ProfileDetail>
+        )}
+        {currentProfile.bio && (
+          <ProfileDetail>{currentProfile.bio}</ProfileDetail>
+        )}
+        {currentProfile.skills && currentProfile.skills.length > 0 && (
+          <div style={{ marginTop: '15px' }}>
+            <SectionTitle>Skills:</SectionTitle>
+            <Tags>
+              {currentProfile.skills.map((skill, index) => (
+                <Tag key={index} color="#2563eb"> {/* Blue-600 */}
+                  {skill}
+                </Tag>
+              ))}
+            </Tags>
           </div>
-        </div>
+        )}
+        {currentProfile.interests && currentProfile.interests.length > 0 && (
+          <div style={{ marginTop: '15px' }}>
+            <SectionTitle>Interests:</SectionTitle>
+            <Tags>
+              {currentProfile.interests.map((interest, index) => (
+                <Tag key={index} color="#16a34a"> {/* Green-600 */}
+                  {interest}
+                </Tag>
+              ))}
+            </Tags>
+          </div>
+        )}
+        {currentProfile.background && (
+          <div style={{ marginTop: '15px' }}>
+            <SectionTitle>Background:</SectionTitle>
+            <ProfileDetail>{currentProfile.background}</ProfileDetail>
+          </div>
+        )}
+      </ProfileCard>
 
-        <div className="flex justify-center gap-6 mt-6">
-          <button
-            onClick={() => handleUpdateConnection(currentProfile._id || '', false)}
-            className="bg-red-500 hover:bg-red-600 text-white p-4 rounded-full transition-transform transform hover:scale-110 shadow-lg focus:outline-none"
-          >
-            <X size={24} />
-          </button>
-          <button
-            onClick={() => handleUpdateConnection(currentProfile._id || '', true)}
-            className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full transition-transform transform hover:scale-110 shadow-lg focus:outline-none"
-          >
-            <Check size={24} />
-          </button>
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <button
-          onClick={handleResetConnections}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors transform hover:scale-105 shadow-md"
+      <ActionButtons>
+        <ActionButton
+          color="#dc2626" // Red-600
+          onClick={() => handleUpdateConnection(currentProfile._id || '', false)}
+          aria-label="Reject"
         >
+          <X size={24} />
+        </ActionButton>
+        <ActionButton
+          color="#16a34a" // Green-600
+          onClick={() => handleUpdateConnection(currentProfile._id || '', true)}
+          aria-label="Accept"
+        >
+          <Check size={24} />
+        </ActionButton>
+      </ActionButtons>
+
+      <ResetContainer>
+        <Button variant="gray" onClick={handleResetConnections}>
           Reset Connections
-        </button>
-      </div>
-    </div>
+        </Button>
+      </ResetContainer>
+    </Container>
   );
 };
 
