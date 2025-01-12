@@ -102,7 +102,6 @@ def categorize_and_return_results(results, documents, good_threshold, okay_thres
 def process_candidates(query):
     # Format candidates for embedding
     people_db = get_all_people()
-    return people_db
 
     candidates = [
         f"Skills: {', '.join(person['skills'])}. Tags: {', '.join(person['tags'])}. Background: {person['background']}."
